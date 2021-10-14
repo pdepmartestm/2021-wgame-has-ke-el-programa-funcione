@@ -5,35 +5,38 @@ import wollok.game.*
 
 //peces u objetos que den o quiten vida
 const objetoFlotante = new ObjetosFlotantes()
+const ancho = 12
+const alto = 6
+const alturaAgua = 4
 
-object pantalla {
+object pantalla{
 	
-	method iniciar() {
-		game.title()
-		game.height()
-		game.width()
-		game.addVisual()
-		game.boardGround()
 	
-        keyboard.up().onPressDo({})
-        keyboard.down().onPressDo({})
-
-        game.onCollideDo()
-        
-        game.onTick(1000,"sale objeto por derecha", objetoFlotante.aparecerObjetoDerecha())
-        game.onTick(1000,"sale objeto por izquierda", objetoFlotante.aparecerObjetoIzquierda())
-        
-        game.start()
-	}
 	
-	}
-
+	method iniciar(){
+		
+		game.title("Juego comida")
+		game.height(alto)
+		game.width(ancho)
+		
+					
+		game.addVisual(movimiento)
+		
+		game.onTick(movimiento.velocidadCaida(), movimiento.movimientoCaida(), {movimiento.moverse()})
+		game.onTick(movimiento.velocidadCaida()*ancho, movimiento.movimientoArranque(), {movimiento.posicionOriginal()})		 
+		
+		
+ 		
+ 		game.start()
+ 		
+ 	}
+ 	}
 
 object persona {
 	
-	var vida = 100
+	const vida = 100
 	var puntaje = 0
-	var tiempo
+	var tiempo = 0
 	
 	method image() {return "assets/persona.png"}
 }
@@ -104,3 +107,77 @@ object cania {
 	
 	
 }
+
+
+object movimiento {
+	
+	var izquierda = true
+	
+	
+	var posicionIzquierda = game.at(ancho,alturaAgua)
+	var posicionDerecha =  game.at(1,alturaAgua)
+	
+	method position() = return if (izquierda) posicionIzquierda else posicionDerecha
+  	
+  	
+  	method posicionOriginalIzq(){
+  		const vertical = (0..alturaAgua).anyOne()
+  		posicionIzquierda = game.at(ancho,vertical)
+  		izquierda = false
+ 		
+  	}
+  	
+  	method posicionOriginalDer(){
+  		const vertical = (0..alturaAgua).anyOne()
+  		posicionDerecha = game.at(0,vertical)
+  		izquierda = true
+ 	
+   	}
+  	
+  	
+  	method posicionOriginal(){
+  		
+ 		if (izquierda)
+ 		self.posicionOriginalIzq()
+ 		else
+ 		self.posicionOriginalDer()
+ 	}
+  	
+  	method moverseIzquierda () { 
+  		posicionIzquierda = posicionIzquierda.left(1)
+  		
+  	}
+  	method moverseDerecha (){ 
+  		posicionDerecha = posicionDerecha.right(1)
+  		
+  	}
+  	
+  	method moverse(){ 
+  		if (izquierda)
+ 		self.moverseIzquierda()
+ 		else
+ 		self.moverseDerecha()
+  		
+  	}
+  	/* 
+  	method encuentroCon(){
+  		CaniaDePescar.NombreDeAccionAlChocarConCania()
+  		const vertical = (0..alturaAgua).anyOne()
+  		posicion = game.at(0,vertical)
+	}*/
+	
+	method image() = return if (izquierda) "FOTO DEL PEZ MOVIENDOSE A IZQUIERDA " else "FOTO DEL PEZ MOVIENDOSE A DERECHA"
+  	
+  	method velocidadCaida() = 500
+ 	
+ 	method movimientoCaida() = "cae comida"
+ 	
+	method movimientoArranque() = "comienza caida comida"
+ 	
+}
+	
+	
+
+
+
+
