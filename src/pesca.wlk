@@ -170,9 +170,9 @@ object movimiento {
   	
   	method velocidadCaida() = 500
  	
- 	method movimientoCaida() = "cae comida"
+ 	method movimientoCaida() = "se mueve"
  	
-	method movimientoArranque() = "comienza caida comida"
+	method movimientoArranque() = "comienza a moverse"
  	
 }
 	
