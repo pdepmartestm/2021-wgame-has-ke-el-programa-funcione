@@ -5,9 +5,9 @@ import wollok.game.*
 
 //peces u objetos que den o quiten vida
 const objetoFlotante = new ObjetosFlotantes()
-const ancho = 12
-const alto = 6
-const alturaAgua = 4
+const ancho = 20 //12
+const alto = 15 //6
+const alturaAgua = 9 //4
 
 object pantalla{
 	
@@ -18,6 +18,7 @@ object pantalla{
 		game.title("Juego comida")
 		game.height(alto)
 		game.width(ancho)
+		game.boardGround("assets/fondo.png")
 		
 					
 		game.addVisual(movimiento)
@@ -50,7 +51,7 @@ object heladeraConPeces {
 	
 	method image() {
 		
-		return "assets/heladera" + self.capacidad() + ".png"
+		return "assets/pez" + self.capacidad() + ".png"
 	}
 	
 	method pesco() {
@@ -166,7 +167,7 @@ object movimiento {
   		posicion = game.at(0,vertical)
 	}*/
 	
-	method image() = return if (izquierda) "FOTO DEL PEZ MOVIENDOSE A IZQUIERDA " else "FOTO DEL PEZ MOVIENDOSE A DERECHA"
+	method image() = return if (izquierda) "assets/PezIzq.png" else "assets/PezDer.png"
   	
   	method velocidadCaida() = 500
  	
