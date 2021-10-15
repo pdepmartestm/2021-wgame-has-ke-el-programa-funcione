@@ -21,12 +21,16 @@ object pantalla{
 		game.boardGround("assets/fondo.png")
 		
 					
-		game.addVisual(movimiento)
+		//game.addVisual(movimiento)
 		
-		game.onTick(movimiento.velocidadCaida(), movimiento.movimientoCaida(), {movimiento.moverse()})
-		game.onTick(movimiento.velocidadCaida()*ancho, movimiento.movimientoArranque(), {movimiento.posicionOriginal()})		 
+		//game.onTick(movimiento.velocidadCaida(), movimiento.movimientoCaida(), {movimiento.moverse()})
+		//game.onTick(movimiento.velocidadCaida()*ancho, movimiento.movimientoArranque(), {movimiento.posicionOriginal()})		 
 		
-		
+		//game.addVisual(ansu)
+		keyboard.up().onPressDo({ansu.moverseArriba()})
+        keyboard.down().onPressDo({ansu.moverseAbajo()})
+        
+        game.onCollideDo(ansu,{hilo => hilo.sacarHilo(hilo)})
  		
  		game.start()
  		
@@ -68,49 +72,6 @@ object heladeraConPeces {
 
 class ObjetosFlotantes {
 	
-	
-	method movimiento() {
-
-		
-	}
-	
-	method aparecerObjetoIzquierda() {
-		
-	}
-	
-	method aparecerObjetoDerecha() {
-		
-	}
-	
-}
-
-object pez inherits ObjetosFlotantes {
-	
-	
-	
-	method image() {
-		// por derecha es una imagen por izquierda otra
-		
-	}
-}
-
-class Basura inherits ObjetosFlotantes {
-	
-	
-	
-}
-
-class Villanos inherits ObjetosFlotantes {
-	
-}
-
-object cania {
-	
-	
-}
-
-
-object movimiento {
 	
 	var izquierda = true
 	
@@ -167,17 +128,97 @@ object movimiento {
   		posicion = game.at(0,vertical)
 	}*/
 	
-	method image() = return if (izquierda) "assets/PezIzq.png" else "assets/PezDer.png"
-  	
   	method velocidadCaida() = 500
  	
  	method movimientoCaida() = "se mueve"
  	
 	method movimientoArranque() = "comienza a moverse"
- 	
+	
+//	method movimiento() {
+//
+//		
+//	}
+//	
+//	method aparecerObjetoIzquierda() {
+//		
+//	}
+//	
+//	method aparecerObjetoDerecha() {
+//		
+//	}
+	
 }
+
+class Pez inherits ObjetosFlotantes {
 	
 	
+	
+	
+	
+	 method image() {
+	 	return if (izquierda) "assets/pezDer.png" else "assets/pezIzq.png"
+		// por derecha es una imagen por izquierda otra
+		
+	}
+}
+
+class Basura inherits ObjetosFlotantes {
+	
+	const basuras = ["zapato","barril","botella"]
+	
+	method image() {
+	 	return  "assets/" + basuras.anyOne() + ".png"}
+	
+}
+
+class Villanos inherits ObjetosFlotantes {
+	
+	method image() {return if (izquierda) "assets/pezDer.png" else "assets/pezIzq.png"}
+	
+}
+
+
+object ansu {
+	
+	var property position = game.at(9,alturaAgua)
+	
+	var property image = "assets/ansu.png"
+	
+	var property cont = 0
+	
+	method arribaMaximo() {
+		
+	return cont < 0
+	}
+	
+	method moverseArriba() {
+		
+		if ( self.arribaMaximo() ) {
+		position = position.up(1)
+		cont += 1 
+		}
+	}
+	method moverseAbajo() {
+		position = position.down(1)
+		const nuevo = new Hilo(position = position.up(1))
+		game.addVisual(nuevo)
+		cont -= 1
+	}
+	
+}
+
+class Hilo {
+
+	var property position
+	
+	var property image = "assets/hilo.png"
+	
+	method sacarHilo(hilo) {
+		
+		game.removeVisual(hilo)
+	}
+		
+}
 
 
 
