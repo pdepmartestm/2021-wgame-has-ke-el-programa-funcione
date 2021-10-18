@@ -19,18 +19,32 @@ object pantalla{
 		game.height(alto)
 		game.width(ancho)
 		game.boardGround("assets/fondo.png")
+		game.addVisual(heladeraConPeces)
 		
-					
-		//game.addVisual(movimiento)
+		//const cosas = [new Pez()]
 		
-		//game.onTick(movimiento.velocidadCaida(), movimiento.movimientoCaida(), {movimiento.moverse()})
-		//game.onTick(movimiento.velocidadCaida()*ancho, movimiento.movimientoArranque(), {movimiento.posicionOriginal()})		 
 		
-		//game.addVisual(ansu)
+		//aca hay que ver si quieren que se genere aleatoreamente una cosa
+		// o ir hacindo varios game.onTick para cada cosa asi controlamos que cantidad se genera de cada
+		
+		//el game.onTick hecho es para peces pero se puede copiar y pegar para hacer para otros ya que solo hay que cambiar el tiempo el y el new COSA()
+		
+		//hay que ver como rehacer el movimiento de los objetos ya que siempre se generan arriba del todo y se superponen
+		game.onTick(10000,"crear pez",{const flota = new Pez()
+												game.addVisual(flota)
+												game.onTick(flota.velocidadCaida(), flota.movimientoCaida(), {flota.moverse()})
+												game.onTick(flota.velocidadCaida()*ancho, flota.movimientoArranque(), {flota.posicionOriginal()})
+		})
+		
+		
+		
+		game.addVisual(ansu)
 		keyboard.up().onPressDo({ansu.moverseArriba()})
         keyboard.down().onPressDo({ansu.moverseAbajo()})
         
-        game.onCollideDo(ansu,{hilo => hilo.sacarHilo(hilo)})
+        
+        
+        game.onCollideDo(ansu,{algo => algo.ansuPesco(algo)})
  		
  		game.start()
  		
@@ -51,6 +65,8 @@ object persona {
 
 object heladeraConPeces {
 	
+	var property position = game.at(5,11)
+	
 	var property capacidad = 0
 	
 	method image() {
@@ -60,6 +76,9 @@ object heladeraConPeces {
 	
 	method pesco() {
 		capacidad = capacidad + 1
+	}
+	method aumentarCantidad() {
+		//TODO: Código autogenerado 
 	}
 }
 	
@@ -71,13 +90,15 @@ object heladeraConPeces {
 
 
 class ObjetosFlotantes {
-	
+
 	
 	var izquierda = true
 	
 	
 	var posicionIzquierda = game.at(ancho,alturaAgua)
 	var posicionDerecha =  game.at(1,alturaAgua)
+	
+	
 	
 	method position() = return if (izquierda) posicionIzquierda else posicionDerecha
   	
@@ -115,6 +136,8 @@ class ObjetosFlotantes {
   	}
   	
   	method moverse(){ 
+  		
+  		
   		if (izquierda)
  		self.moverseIzquierda()
  		else
@@ -153,8 +176,6 @@ class Pez inherits ObjetosFlotantes {
 	
 	
 	
-	
-	
 	 method image() {
 	 	return if (izquierda) "assets/pezDer.png" else "assets/pezIzq.png"
 		// por derecha es una imagen por izquierda otra
@@ -169,11 +190,19 @@ class Basura inherits ObjetosFlotantes {
 	method image() {
 	 	return  "assets/" + basuras.anyOne() + ".png"}
 	
+	
+	method ansuPesco(basura){
+		
+	}
 }
 
 class Villanos inherits ObjetosFlotantes {
 	
 	method image() {return if (izquierda) "assets/pezDer.png" else "assets/pezIzq.png"}
+	
+	method ansuPesco(villano){
+		
+	}
 	
 }
 
@@ -197,12 +226,32 @@ object ansu {
 		position = position.up(1)
 		cont += 1 
 		}
+		else
+		{
+			self.hayUnPescado()
+		}
 	}
 	method moverseAbajo() {
 		position = position.down(1)
 		const nuevo = new Hilo(position = position.up(1))
 		game.addVisual(nuevo)
 		cont -= 1
+	}
+	
+	method hayUnPescado() {
+		
+		if (self.image() == "assets/ansuConPez.png")
+		{
+			
+			image = "assets/ansu.png"
+			heladeraConPeces.aumentarCantidad()
+			
+		}
+		
+	}
+	
+	method ansuPesco(pez) {
+		
 	}
 	
 }
@@ -213,7 +262,7 @@ class Hilo {
 	
 	var property image = "assets/hilo.png"
 	
-	method sacarHilo(hilo) {
+	method ansuPesco(hilo) {
 		
 		game.removeVisual(hilo)
 	}
