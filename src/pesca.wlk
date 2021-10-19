@@ -30,7 +30,6 @@ object pantalla{
 		
 		//el game.onTick hecho es para peces pero se puede copiar y pegar para hacer para otros ya que solo hay que cambiar el tiempo el y el new COSA()
 		
-		
 		game.onTick(5000,"crear pez",{ const objetoFlotante = new Pez()
 												game.addVisual(objetoFlotante)
 												game.onTick(objetoFlotante.velocidadMov(), objetoFlotante.movimientoMov(), {objetoFlotante.moverse()})
@@ -44,7 +43,7 @@ object pantalla{
 		keyboard.up().onPressDo({ansu.moverseArriba()})
         keyboard.down().onPressDo({ansu.moverseAbajo()})
         
-        
+        //keyboard.left().onPressDo({const medu = new Medusa()  medu.ansuPesco()})
         
         game.onCollideDo(ansu,{algo => algo.ansuPesco()})
  		
@@ -59,35 +58,17 @@ object persona {
 	const vida = 100
 	var puntaje = 0
 	var tiempo = 0
-	var electrocutado = false
 	var property position = game.at(8.15,10.99999455)
 	
 	var property image = "assets/pinguino.png"
 	
-/* 	
-	method cambiarImagen() {
-		if (electrocutado) {
-			game.onTick(300, "imagen", { image = ["assets/pinguinoElectrocutado2.png","assets/pinguinoElectrocutado1.png"].anyOne()})
-			game.onTick(1200, "imagen", { image = "assets/pinguino.png"})
-			electrocutado = false	
-			}
-		
-		else image = "assets/pinguino.png"		
-	}
-	
-	method cambiarEstado() {
-		electrocutado = true 
-	}
-	
-*/	
-	
-	
 
-	method cambiarEstado() {
-		//TODO: Código autogenerado 
-	}
+
 	method cambiarImagen() {
-		//TODO: Código autogenerado 
+		image = "assets/pinguinoElectrocutado2.png"
+	}
+	method volverNormalidad() {
+		image = "assets/pinguino.png" 
 	}
 }
 
@@ -103,7 +84,11 @@ object contadorVida {
 	}
 	
 		method agregarVida() {
-		vidas+=1
+			
+		if (vidas < 3){
+			vidas+=1
+		}
+		
 	}
 }
 
@@ -189,6 +174,9 @@ class ObjetosFlotantes {
   	
   	
   	
+  	//hay que ver el tema de que se generen aleatoreamente tambien en la izquierda
+  	//asi puede salir peces por ambos lados y no solo por la derecha
+  	
   	method moverse(){ 
   		
   		
@@ -273,17 +261,19 @@ class Basura inherits ObjetosFlotantes {
 
 class Medusa inherits ObjetosFlotantes {
 	
+	//fijar despues cuanto tiempo quieren paralizar
+	const cantidadParalizar = 5000
+	
 	method image() {return if (izquierda) "assets/meduzaDer.png" else "assets/meduzaIzq.png"}
 	
 	method ansuPesco(){
 		
-		persona.cambiarEstado()
 		persona.cambiarImagen()
-		game.removeVisual(self)
-		
-		//hay que agregar la imagen de la caña electrocutada y ponerle el nombre ansuConCañaElectrocuda
 		ansu.cambiarImagen("cañaElectrocutada")
+		game.onTick(cantidadParalizar,"pesco medusa",{ansu.sacarElec() persona.volverNormalidad() })
 		
+		//hay que ver este tema porque tira un mensaje raro con la medusa
+		//game.removeVisual(self)
 	}
 }
 
@@ -293,7 +283,7 @@ object ansu {
 	
 	var property position = game.at(9,alturaAgua)
 	
-	
+	var property caniaElec = false
 	
 	var property image = "assets/ansu.png"
 	
@@ -335,37 +325,21 @@ object ansu {
 		
 	}
 	
-//	method ansuPesco(algo) {
-//		if(algo.image() == "assets/pezDer.png" || algo.image() == "assets/pezIzq.png")
-//		{
-//			image = "assets/ansuConPez.png"
-//			//self.hayUnPescado()
-//			game.removeVisual(algo)
-//		}
-//		/*if(self.chocoMedusa(algo)){
-//			image = "assets/cañaElectrocutada.png"
-//			//new Hilo(position = position.up(1)).cambiarImagen(algo)
-//			persona.cambiarEstado()
-//			persona.cambiarImagen()
-//			
-//			game.removeVisual(algo)
-//			
-//		}*/
-//		else 
-//		{
-//			if(algo.image() == "assets/hilo.png")
-//			{
-//				game.removeVisual(algo)
-//			}
-//		}
-//		
-//	}
-	
-	method chocoMedusa(algo) {
-		return algo.image() == "assets/meduzaDer.png" || algo.image() == "assets/meduzaIzq.png"
-	}
+
 	method cambiarImagen(cosa) {
-		image =  "assets/ansuCon" + cosa +  ".png"
+		if (cosa == "cañaElectrocutada")
+		{
+			caniaElec = true
+		}
+		else
+		{
+		  image =  "assets/ansuCon" + cosa +  ".png"
+		}
+
+		
+	}
+	method sacarElec() {
+		caniaElec = false
 	}
 	
 	
@@ -375,7 +349,20 @@ class Hilo {
 
 	var property position
 	
-	var property image = "assets/hilo.png"
+	var image = "assets/hilo.png"
+	
+	method image() {
+		
+		if (ansu.caniaElec()){
+			 image = "assets/canaElectrocutada.png"
+		}
+		else
+		{
+			image = "assets/hilo.png"
+		}
+		
+      return image
+	}
 	
 	method ansuPesco() {
 		
