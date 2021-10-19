@@ -44,7 +44,7 @@ object pantalla{
         
         
         
-        game.onCollideDo(ansu,{algo => algo.ansuPesco(algo)})
+        game.onCollideDo(ansu,{algo => ansu.ansuPesco(algo)})
  		
  		game.start()
  		
@@ -57,7 +57,9 @@ object persona {
 	var puntaje = 0
 	var tiempo = 0
 	
-	method image() {return "assets/persona.png"}
+	method image() {
+		return "assets/persona.png"
+	}
 }
 
 
@@ -77,8 +79,9 @@ object heladeraConPeces {
 	method pesco() {
 		capacidad = capacidad + 1
 	}
+	
 	method aumentarCantidad() {
-		//TODO: Código autogenerado 
+		capacidad += 1
 	}
 }
 	
@@ -174,12 +177,9 @@ class ObjetosFlotantes {
 
 class Pez inherits ObjetosFlotantes {
 	
-	
-	
 	 method image() {
 	 	return if (izquierda) "assets/pezDer.png" else "assets/pezIzq.png"
 		// por derecha es una imagen por izquierda otra
-		
 	}
 }
 
@@ -189,20 +189,15 @@ class Basura inherits ObjetosFlotantes {
 	
 	method image() {
 	 	return  "assets/" + basuras.anyOne() + ".png"}
-	
-	
-	method ansuPesco(basura){
-		
-	}
 }
 
 class Villanos inherits ObjetosFlotantes {
 	
 	method image() {return if (izquierda) "assets/pezDer.png" else "assets/pezIzq.png"}
 	
-	method ansuPesco(villano){
+	//method ansuPesco(villano){
 		
-	}
+	//}
 	
 }
 
@@ -238,19 +233,29 @@ object ansu {
 		cont -= 1
 	}
 	
-	method hayUnPescado() {
-		
+ 	method hayUnPescado() {		
 		if (self.image() == "assets/ansuConPez.png")
 		{
-			
 			image = "assets/ansu.png"
 			heladeraConPeces.aumentarCantidad()
-			
 		}
 		
 	}
 	
-	method ansuPesco(pez) {
+	method ansuPesco(algo) {
+		if(algo.image() == "assets/pezDer.png" || algo.image() == "assets/pezIzq.png")
+		{
+			image = "assets/ansuConPez.png"
+			//self.hayUnPescado()
+			game.removeVisual(algo)
+		}
+		else
+		{
+			if(algo.image() == "assets/hilo.png")
+			{
+				game.removeVisual(algo)
+			}
+		}
 		
 	}
 	
@@ -261,12 +266,6 @@ class Hilo {
 	var property position
 	
 	var property image = "assets/hilo.png"
-	
-	method ansuPesco(hilo) {
-		
-		game.removeVisual(hilo)
-	}
-		
 }
 
 
