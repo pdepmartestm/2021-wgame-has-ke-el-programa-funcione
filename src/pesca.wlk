@@ -46,7 +46,7 @@ object pantalla{
         
         
         
-        game.onCollideDo(ansu,{algo => ansu.ansuPesco(algo)})
+        game.onCollideDo(ansu,{algo => algo.ansuPesco()})
  		
  		game.start()
  		
@@ -82,9 +82,30 @@ object persona {
 */	
 	
 	
+
+	method cambiarEstado() {
+		//TODO: Código autogenerado 
+	}
+	method cambiarImagen() {
+		//TODO: Código autogenerado 
+	}
 }
 
-
+object contadorVida {
+	var property image = "assets/contVidas" + vidas + ".png"
+	
+	var property position = game.center()
+	
+	var vidas = 3
+	
+	method sacarVida() {
+		vidas-=1
+	}
+	
+		method agregarVida() {
+		vidas+=1
+	}
+}
 
 
 object heladeraConPeces {
@@ -119,6 +140,8 @@ class ObjetosFlotantes {
 	
 	var posicionIzquierda = game.at(ancho,vertical)
 	var posicionDerecha =  game.at(-1,vertical)
+	
+	
 	
 	
 	
@@ -164,6 +187,8 @@ class ObjetosFlotantes {
   		
   	}
   	
+  	
+  	
   	method moverse(){ 
   		
   		
@@ -195,9 +220,18 @@ class ObjetosFlotantes {
 
 class Pez inherits ObjetosFlotantes {
 	
+
+	
 	 method image() {
 	 	return if (izquierda) "assets/pezDer.png" else "assets/pezIzq.png"
 		// por derecha es una imagen por izquierda otra
+	}
+	
+	method ansuPesco() {
+		
+	    ansu.cambiarImagen("Pez")
+	 	game.removeVisual(self)
+	 	
 	}
 }
 
@@ -211,18 +245,46 @@ class Basura inherits ObjetosFlotantes {
 	
 	method image() {
 	 	return  "assets/" + basuras.anyOne() + ".png"}
+	 	
+	 	
+	 method ansuPesco() {
+	 	
+	game.removeVisual(self)
+	contadorVida.sacarVida()
+	
+} 	
+	 
 }
 
 
 
 
 
-class Villanos inherits ObjetosFlotantes {
+//que van a tener de iguales o distinto los villanos??
+//porque habria que hacer una clase para cada villano y si tienen
+// todo distinto no hace falta hacer una clase general de villanos
+//class Villanos inherits ObjetosFlotantes {
+//	
+//	method image() {return if (izquierda) "assets/meduzaDer.png" else "assets/meduzaIzq.png"}
+//	
+//	
+//	
+//}
+
+class Medusa inherits ObjetosFlotantes {
 	
 	method image() {return if (izquierda) "assets/meduzaDer.png" else "assets/meduzaIzq.png"}
 	
-	
-	
+	method ansuPesco(){
+		
+		persona.cambiarEstado()
+		persona.cambiarImagen()
+		game.removeVisual(self)
+		
+		//hay que agregar la imagen de la caña electrocutada y ponerle el nombre ansuConCañaElectrocuda
+		ansu.cambiarImagen("cañaElectrocutada")
+		
+	}
 }
 
 
@@ -231,9 +293,13 @@ object ansu {
 	
 	var property position = game.at(9,alturaAgua)
 	
+	
+	
 	var property image = "assets/ansu.png"
 	
 	var property cont = 0
+	
+	
 	
 	method arribaMaximo() {
 		
@@ -269,33 +335,37 @@ object ansu {
 		
 	}
 	
-	method ansuPesco(algo) {
-		if(algo.image() == "assets/pezDer.png" || algo.image() == "assets/pezIzq.png")
-		{
-			image = "assets/ansuConPez.png"
-			//self.hayUnPescado()
-			game.removeVisual(algo)
-		}
-		/*if(self.chocoMedusa(algo)){
-			image = "assets/cañaElectrocutada.png"
-			//new Hilo(position = position.up(1)).cambiarImagen(algo)
-			persona.cambiarEstado()
-			persona.cambiarImagen()
-			
-			game.removeVisual(algo)
-			
-		}*/
-		else 
-		{
-			if(algo.image() == "assets/hilo.png")
-			{
-				game.removeVisual(algo)
-			}
-		}
-		
-	}
+//	method ansuPesco(algo) {
+//		if(algo.image() == "assets/pezDer.png" || algo.image() == "assets/pezIzq.png")
+//		{
+//			image = "assets/ansuConPez.png"
+//			//self.hayUnPescado()
+//			game.removeVisual(algo)
+//		}
+//		/*if(self.chocoMedusa(algo)){
+//			image = "assets/cañaElectrocutada.png"
+//			//new Hilo(position = position.up(1)).cambiarImagen(algo)
+//			persona.cambiarEstado()
+//			persona.cambiarImagen()
+//			
+//			game.removeVisual(algo)
+//			
+//		}*/
+//		else 
+//		{
+//			if(algo.image() == "assets/hilo.png")
+//			{
+//				game.removeVisual(algo)
+//			}
+//		}
+//		
+//	}
+	
 	method chocoMedusa(algo) {
 		return algo.image() == "assets/meduzaDer.png" || algo.image() == "assets/meduzaIzq.png"
+	}
+	method cambiarImagen(cosa) {
+		image =  "assets/ansuCon" + cosa +  ".png"
 	}
 	
 	
@@ -307,7 +377,11 @@ class Hilo {
 	
 	var property image = "assets/hilo.png"
 	
-	
+	method ansuPesco() {
+		
+				game.removeVisual(self)
+			
+	}
 }
 
 
