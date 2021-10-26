@@ -6,6 +6,21 @@ import wollok.game.*
 //peces u objetos que den o quiten vida
 
 
+
+
+/*
+ hay que ver que cuando un objeto se genera, al dar una vuelta completa (de izq a der y de der a izq)
+ se elimine ya que se van a generar otros iguales durante ese lapso y si no se borra ninguno van a terminar
+ llenando la pantalla de esos 
+ */
+
+
+// IDEA PARA IMPLEMENTAR 
+
+//hay que ver el tema de que se generen aleatoreamente tambien en la izquierda
+//asi puede salir peces por ambos lados y no solo por la derecha
+
+
 const ancho = 20 //12
 const alto = 15 //6
 const alturaAgua = 9 //4
@@ -21,14 +36,10 @@ object pantalla{
 		game.width(ancho)
 		game.boardGround("assets/fondo1.png")
 		game.addVisual(heladeraConPeces)
-		
-		//const cosas = [new Pez()]
-		
-		
-		//aca hay que ver si quieren que se genere aleatoreamente una cosa
-		// o ir hacindo varios game.onTick para cada cosa asi controlamos que cantidad se genera de cada
-		
-		//el game.onTick hecho es para peces pero se puede copiar y pegar para hacer para otros ya que solo hay que cambiar el tiempo el y el new COSA()
+		game.addVisual(contadorVida)
+
+
+// ver que cantidad de tiempo se quiere para cada uno
 		
 		game.onTick(5000,"crear pez",{ const objetoFlotante = new Pez()
 												game.addVisual(objetoFlotante)
@@ -36,14 +47,42 @@ object pantalla{
 												game.onTick(objetoFlotante.velocidadMov()*ancho, objetoFlotante.movimientoArranque(), {objetoFlotante.posicionOriginal()})
 		})
 		
-			
 		
+		game.onTick(2500,"crear basura",{ const objetoFlotante = new Basura()
+												game.addVisual(objetoFlotante)
+												game.onTick(objetoFlotante.velocidadMov(), objetoFlotante.movimientoMov(), {objetoFlotante.moverse()})
+												game.onTick(objetoFlotante.velocidadMov()*ancho, objetoFlotante.movimientoArranque(), {objetoFlotante.posicionOriginal()})
+		})
+		
+		game.onTick(2500,"crear medusa",{ const objetoFlotante = new Medusa()
+												game.addVisual(objetoFlotante)
+												game.onTick(objetoFlotante.velocidadMov(), objetoFlotante.movimientoMov(), {objetoFlotante.moverse()})
+												game.onTick(objetoFlotante.velocidadMov()*ancho, objetoFlotante.movimientoArranque(), {objetoFlotante.posicionOriginal()})
+		})
+		
+		game.onTick(2500,"crear tiburo",{ const objetoFlotante = new Tiburon()
+												game.addVisual(objetoFlotante)
+												game.onTick(objetoFlotante.velocidadMov(), objetoFlotante.movimientoMov(), {objetoFlotante.moverse()})
+												game.onTick(objetoFlotante.velocidadMov()*ancho, objetoFlotante.movimientoArranque(), {objetoFlotante.posicionOriginal()})
+		})
+		
+		game.onTick(2500,"crear Gusano",{ const objetoFlotante = new Gusano()
+												game.addVisual(objetoFlotante)
+												game.onTick(objetoFlotante.velocidadMov(), objetoFlotante.movimientoMov(), {objetoFlotante.moverse()})
+												game.onTick(objetoFlotante.velocidadMov()*ancho, objetoFlotante.movimientoArranque(), {objetoFlotante.posicionOriginal()})
+		})
+			
+		game.onTick(1,"chequear si perdio",{if(persona.perdio())
+			                                {
+			                                	//sacar todo y poner imagen diciendo que perdio
+			                                }
+		})	
+			
+			
 		game.addVisual(persona)
 		game.addVisual(ansu)
 		keyboard.up().onPressDo({ansu.moverseArriba()})
         keyboard.down().onPressDo({ansu.moverseAbajo()})
-        
-        //keyboard.left().onPressDo({const medu = new Medusa()  medu.ansuPesco()})
         
         game.onCollideDo(ansu,{algo => algo.ansuPesco()})
  		
@@ -55,9 +94,11 @@ object pantalla{
 
 object persona {
 	
-	const vida = 100
-	var puntaje = 0
-	var tiempo = 0
+	var property puntaje = 0
+	var property tiempo = 0
+	
+	var property estaParalizado = false
+	
 	var property position = game.at(8.15,10.99999455)
 	
 	var property image = "assets/pinguino.png"
@@ -70,23 +111,47 @@ object persona {
 	method volverNormalidad() {
 		image = "assets/pinguino.png" 
 	}
+	
+
+	method electrucutado() {
+		
+		if (estaParalizado)
+		{
+			estaParalizado = false
+		}
+		else
+		{
+			estaParalizado = true
+		}
+		
+	}
+	method perdio() {
+		
+		return contadorVida.vidas() <= 0 
+	}
 }
 
 object contadorVida {
-	var property image = "assets/contVidas" + vidas + ".png"
 	
-	var property position = game.center()
+	var property vidas = 3
 	
-	var vidas = 3
+	var property image = "assets/contVidas3.png"
 	
-	method sacarVida() {
-		vidas-=1
+	var property position = game.at(1,13)
+	
+	
+	method sacarVida(cant) {
+		
+		vidas = vidas - cant
+		image = "assets/contVidas"+ vidas + ".png"
 	}
 	
 		method agregarVida() {
 			
 		if (vidas < 3){
-			vidas+=1
+			
+			vidas = vidas + 1
+			image = "assets/contVidas"+ vidas + ".png"
 		}
 		
 	}
@@ -174,8 +239,7 @@ class ObjetosFlotantes {
   	
   	
   	
-  	//hay que ver el tema de que se generen aleatoreamente tambien en la izquierda
-  	//asi puede salir peces por ambos lados y no solo por la derecha
+
   	
   	method moverse(){ 
   		
@@ -186,12 +250,6 @@ class ObjetosFlotantes {
  		self.moverseDerecha()
   		
   	}
-  	/* 
-  	method encuentroCon(){
-  		CaniaDePescar.NombreDeAccionAlChocarConCania()
-  		const vertical = (0..alturaAgua).anyOne()
-  		posicion = game.at(0,vertical)
-	}*/
 	
   	method velocidadMov() = 500
  	
@@ -212,7 +270,6 @@ class Pez inherits ObjetosFlotantes {
 	
 	 method image() {
 	 	return if (izquierda) "assets/pezDer.png" else "assets/pezIzq.png"
-		// por derecha es una imagen por izquierda otra
 	}
 	
 	method ansuPesco() {
@@ -231,14 +288,16 @@ class Basura inherits ObjetosFlotantes {
 	
 	const basuras = ["zapato","barril","botella"]
 	
+	const objeto = basuras.anyOne()
+	
 	method image() {
-	 	return  "assets/" + basuras.anyOne() + ".png"}
+	 	return  "assets/" + objeto + ".png"}
 	 	
 	 	
 	 method ansuPesco() {
 	 	
 	game.removeVisual(self)
-	contadorVida.sacarVida()
+	contadorVida.sacarVida(1)
 	
 } 	
 	 
@@ -248,21 +307,12 @@ class Basura inherits ObjetosFlotantes {
 
 
 
-//que van a tener de iguales o distinto los villanos??
-//porque habria que hacer una clase para cada villano y si tienen
-// todo distinto no hace falta hacer una clase general de villanos
-//class Villanos inherits ObjetosFlotantes {
-//	
-//	method image() {return if (izquierda) "assets/meduzaDer.png" else "assets/meduzaIzq.png"}
-//	
-//	
-//	
-//}
 
 class Medusa inherits ObjetosFlotantes {
 	
+	
 	//fijar despues cuanto tiempo quieren paralizar
-	const cantidadParalizar = 5000
+	const cantidadParalizar = 2500
 	
 	method image() {return if (izquierda) "assets/meduzaDer.png" else "assets/meduzaIzq.png"}
 	
@@ -270,14 +320,45 @@ class Medusa inherits ObjetosFlotantes {
 		
 		persona.cambiarImagen()
 		ansu.cambiarImagen("cañaElectrocutada")
-		game.onTick(cantidadParalizar,"pesco medusa",{ansu.sacarElec() persona.volverNormalidad() })
+		persona.electrucutado()
+	    game.removeVisual(self)
+		game.schedule(cantidadParalizar,{ansu.sacarElec() persona.volverNormalidad() persona.electrucutado() })
 		
-		//hay que ver este tema porque tira un mensaje raro con la medusa
-		//game.removeVisual(self)
+
 	}
 }
 
+class Gusano inherits ObjetosFlotantes {
+	
+	var property image = "assets/lataDeGusanos.png"
+	
+	method ansuPesco() {
+		
+		game.removeVisual(self)
+		contadorVida.agregarVida()
+	}
+	
+}
 
+
+// ver que hacer con este, el cangrejo es muy complicado ya que colicionaria con los hilos
+// no con el ansuelo
+
+//class Cangrejo inherits ObjetosFlotantes {
+//	
+//}
+
+
+class Tiburon inherits ObjetosFlotantes {
+	
+	var property image = "assets/tiburon.png"
+	
+	method ansuPesco() {
+		game.removeVisual(self)
+		contadorVida.sacarVida(3)
+	}
+	
+}
 
 object ansu {
 	
@@ -299,6 +380,9 @@ object ansu {
 	
 	method moverseArriba() {
 		
+		if (!persona.estaParalizado())	
+	{
+			
 		if ( self.arribaMaximo() ) {
 		position = position.up(1)
 		cont += 1 
@@ -307,12 +391,21 @@ object ansu {
 		{
 			self.hayUnPescado()
 		}
+		
 	}
+	
+}
 	method moverseAbajo() {
+		
+		if (!persona.estaParalizado())
+		
+		{
 		position = position.down(1)
 		const nuevo = new Hilo(position = position.up(1))
 		game.addVisual(nuevo)
 		cont -= 1
+		
+		}
 	}
 	
  	method hayUnPescado() {		
