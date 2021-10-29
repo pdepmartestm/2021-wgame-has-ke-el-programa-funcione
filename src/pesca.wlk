@@ -34,6 +34,7 @@ object pantalla{
 		game.title("Juego comida")
 		game.height(alto)
 		game.width(ancho)
+ 
 		game.boardGround("assets/fondo1.png")
 		game.addVisual(heladeraConPeces)
 		game.addVisual(contadorVida)
@@ -71,12 +72,6 @@ object pantalla{
 												game.onTick(objetoFlotante.velocidadMov(), objetoFlotante.movimientoMov(), {objetoFlotante.moverse()})
 												game.onTick(objetoFlotante.velocidadMov()*ancho, objetoFlotante.movimientoArranque(), {objetoFlotante.posicionOriginal()})
 		})
-			
-		game.onTick(1,"chequear si perdio",{if(persona.perdio())
-			                                {
-			                                	//sacar todo y poner imagen diciendo que perdio
-			                                }
-		})	
 			
 			
 		game.addVisual(persona)
@@ -144,6 +139,15 @@ object contadorVida {
 		
 		vidas = vidas - cant
 		image = "assets/contVidas"+ vidas + ".png"
+		
+		if (persona.perdio()){
+	       game.clear()
+           game.boardGround("assets/gameOver.png")
+		   game.schedule(1000,{})
+		   //poner contador de peces hasta donde llego
+	       //sacar todo y poner imagen diciendo que perdio
+		}
+		
 	}
 	
 		method agregarVida() {
@@ -341,21 +345,13 @@ class Gusano inherits ObjetosFlotantes {
 }
 
 
-// ver que hacer con este, el cangrejo es muy complicado ya que colicionaria con los hilos
-// no con el ansuelo
-
-//class Cangrejo inherits ObjetosFlotantes {
-//	
-//}
-
-
 class Tiburon inherits ObjetosFlotantes {
 	
 	var property image = "assets/tiburon.png"
 	
 	method ansuPesco() {
 		game.removeVisual(self)
-		contadorVida.sacarVida(3)
+		contadorVida.sacarVida(1)
 	}
 	
 }
