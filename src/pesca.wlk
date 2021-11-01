@@ -61,37 +61,31 @@ object pantalla{
 
 // ver que cantidad de tiempo se quiere para cada uno
 		
-		game.onTick(5000,"crear pez",{ const objetoFlotante = new Pez()
-												game.addVisual(objetoFlotante)
-												game.onTick(objetoFlotante.velocidadMov(), objetoFlotante.movimientoMov(), {objetoFlotante.moverse()})
-												game.onTick(objetoFlotante.velocidadMov()*ancho, objetoFlotante.movimientoArranque(), {objetoFlotante.posicionOriginal()})
-		})
-		
-		
-		game.onTick(2500,"crear basura",{ const objetoFlotante = new Basura()
-												game.addVisual(objetoFlotante)
-												game.onTick(objetoFlotante.velocidadMov(), objetoFlotante.movimientoMov(), {objetoFlotante.moverse()})
-												game.onTick(objetoFlotante.velocidadMov()*ancho, objetoFlotante.movimientoArranque(), {objetoFlotante.posicionOriginal()})
-		})
-		
-		game.onTick(2500,"crear medusa",{ const objetoFlotante = new Medusa()
-												game.addVisual(objetoFlotante)
-												game.onTick(objetoFlotante.velocidadMov(), objetoFlotante.movimientoMov(), {objetoFlotante.moverse()})
-												game.onTick(objetoFlotante.velocidadMov()*ancho, objetoFlotante.movimientoArranque(), {objetoFlotante.posicionOriginal()})
-		})
-		
-		game.onTick(2500,"crear tiburo",{ const objetoFlotante = new Tiburon()
-												game.addVisual(objetoFlotante)
-												game.onTick(objetoFlotante.velocidadMov(), objetoFlotante.movimientoMov(), {objetoFlotante.moverse()})
-												game.onTick(objetoFlotante.velocidadMov()*ancho, objetoFlotante.movimientoArranque(), {objetoFlotante.posicionOriginal()})
-		})
-		
-		game.onTick(2500,"crear Gusano",{ const objetoFlotante = new Gusano()
-												game.addVisual(objetoFlotante)
-												game.onTick(objetoFlotante.velocidadMov(), objetoFlotante.movimientoMov(), {objetoFlotante.moverse()})
-												game.onTick(objetoFlotante.velocidadMov()*ancho, objetoFlotante.movimientoArranque(), {objetoFlotante.posicionOriginal()})
-		})
-			
+ 		game.onTick(5000,"se crea pez", {const pez = new Pez()
+        	                             game.addVisual(pez)
+        	                             pez.movete()
+        })
+
+ 		game.onTick(5000,"se crea basura", {const basura = new Basura()
+        	                             game.addVisual(basura)
+        	                             basura.movete()
+        })
+        
+        game.onTick(5000,"se crea medusa", {const medusa = new Medusa()
+        	                             game.addVisual(medusa)
+        	                             medusa.movete()
+        })
+        
+        game.onTick(5000,"se crea tiburon", {const tiburon = new Tiburon()
+        	                             game.addVisual(tiburon)
+        	                             tiburon.movete()
+        })
+        
+        game.onTick(5000,"se crea lata de gusanos", {const lataGusanos = new Gusano()
+        	                             game.addVisual(lataGusanos)
+        	                             lataGusanos.movete()
+        })
+        
 			
 		game.addVisual(persona)
 		game.addVisual(ansu)
@@ -206,75 +200,48 @@ object heladeraConPeces {
 
 class ObjetosFlotantes {
 
-	
-	var izquierda = true
-	
 	const vertical = (0..alturaAgua).anyOne()
 	
-	var posicionIzquierda = game.at(ancho,vertical)
-	var posicionDerecha =  game.at(-1,vertical)
+	const horizontal = [20,-1].anyOne()
+	
+	const posicionInicial  = game.at(horizontal,vertical)
+	
+	var property estaDerecha = !(horizontal == -1)
 	
 	
+	var property position = posicionInicial
 	
-	
-	
-	method position() {
-		var posicion 
-		
-		if (izquierda) posicion = posicionIzquierda 
-		else posicion = posicionDerecha
-		
-		return posicion
-	} 
-  	
-  	
-  	method posicionOriginalIzq(){
-  		
-  		posicionIzquierda = game.at(ancho,vertical)
-  		izquierda = false
- 		
-  	}
-  	
-  	method posicionOriginalDer(){
-  		
-  		posicionDerecha = game.at(0,vertical)
-  		izquierda = true
- 	
-   	}
-  	
-  	
-  	method posicionOriginal(){
-  		
- 		if (izquierda)
- 		self.posicionOriginalIzq()
- 		else
- 		self.posicionOriginalDer()
- 	}
-  	
-  	method moverseIzquierda () { 
-  		posicionIzquierda = posicionIzquierda.left(1)
-  		
-  	}
-  	method moverseDerecha (){ 
-  		posicionDerecha = posicionDerecha.right(1)
-  		
-  	}
-  	
-  	
-  	
 
-  	
-  	method moverse(){ 
-  		
-  		
-  		if (izquierda)
- 		self.moverseIzquierda()
- 		else
- 		self.moverseDerecha()
-  		
-  	}
+
+	method movete() {
+        if (position.x() == -2 or position.x() == 21){
+        	
+          game.removeVisual(self)
+        }
+        else
+        {
+        	self.moverPosicion()
+		    game.schedule(self.velocidadMov(),{self.movete()})
+        	
+        }
+		
+		
+	}
 	
-  	method velocidadMov() = 500
+	method moverPosicion() {
+		
+		if (estaDerecha){
+			position = position.left(1) 
+		}
+		else
+		{
+			position = position.right(1) 
+		}
+		
+		
+	}
+	
+  	method velocidadMov() = 1000
  	
  	method movimientoMov() = "se mueve"
  	
@@ -292,7 +259,7 @@ class Pez inherits ObjetosFlotantes {
 
 	
 	 method image() {
-	 	return if (izquierda) "assets/pezDer.png" else "assets/pezIzq.png"
+	 	return if (estaDerecha) "assets/pezDer.png" else "assets/pezIzq.png"
 	}
 	
 	method ansuPesco() {
@@ -301,6 +268,8 @@ class Pez inherits ObjetosFlotantes {
 	 	game.removeVisual(self)
 	 	
 	}
+	
+//	override method velocidadMov() = 1000
 }
 
 
@@ -337,7 +306,7 @@ class Medusa inherits ObjetosFlotantes {
 	//fijar despues cuanto tiempo quieren paralizar
 	const cantidadParalizar = 2500
 	
-	method image() {return if (izquierda) "assets/meduzaDer.png" else "assets/meduzaIzq.png"}
+	method image() {return if (estaDerecha) "assets/meduzaDer.png" else "assets/meduzaIzq.png"}
 	
 	method ansuPesco(){
 		
@@ -367,12 +336,12 @@ class Gusano inherits ObjetosFlotantes {
 class Tiburon inherits ObjetosFlotantes {
 	
 	 method image() {
-	 	return if (izquierda) "assets/tiburonIzq.png" else "assets/tiburonDer.png"
+	 	return if (estaDerecha) "assets/tiburonIzq.png" else "assets/tiburonDer.png"
 	}
 	
 	method ansuPesco() {
 		game.removeVisual(self)
-		contadorVida.sacarVida(1)
+		contadorVida.sacarVida(3)
 	}
 	
 }
