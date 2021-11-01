@@ -1,15 +1,5 @@
 import wollok.game.*
 
-//persona: puntaje, tiempo, vida, 
-
-
-//peces u objetos que den o quiten vida
-
-
-
-
-
-
 const ancho = 20 //12
 const alto = 15 //6
 const alturaAgua = 9 //4
@@ -29,13 +19,20 @@ object pantalla{
 	
 	method pantallaInicio() {
 		
-		game.title("club de la pesca")
+		game.title("Pesca en el Hielo")
 		game.width(ancho)
 		game.height(alto)
 		game.addVisual(fondoIniciar)
-//		game.boardGround("assets/pantallaInicio.png")
 	    game.boardGround("assets/fondo1.png")
 		keyboard.enter().onPressDo{self.iniciar()}
+		
+    	const musica = game.sound("assets/cancionFondo.mp3")
+ 		musica.shouldLoop(true)
+ 		game.schedule(500,{musica.play() musica.volume(0.5)})
+ 		keyboard.m().onPressDo{musica.volume(0)}
+ 		keyboard.u().onPressDo{musica.volume(0.5)}
+ 		keyboard.d().onPressDo{musica.volume(0.2)}
+ 		
 	}	
 	
 	
@@ -55,12 +52,12 @@ object pantalla{
 
 // ver que cantidad de tiempo se quiere para cada uno
 		
- 		game.onTick(5000,"se crea pez", {const pez = new Pez()
+ 		game.onTick(2500,"se crea pez", {const pez = new Pez()
         	                             game.addVisual(pez)
         	                             pez.movete()
         })
 
- 		game.onTick(5000,"se crea basura", {const basura = new Basura()
+ 		game.onTick(3500,"se crea basura", {const basura = new Basura()
         	                             game.addVisual(basura)
         	                             basura.movete()
         })
@@ -70,12 +67,12 @@ object pantalla{
         	                             medusa.movete()
         })
         
-        game.onTick(5000,"se crea tiburon", {const tiburon = new Tiburon()
+        game.onTick(10000,"se crea tiburon", {const tiburon = new Tiburon()
         	                             game.addVisual(tiburon)
         	                             tiburon.movete()
         })
         
-        game.onTick(5000,"se crea lata de gusanos", {const lataGusanos = new Gusano()
+        game.onTick(7000,"se crea lata de gusanos", {const lataGusanos = new Gusano()
         	                             game.addVisual(lataGusanos)
         	                             lataGusanos.movete()
         })
@@ -86,18 +83,17 @@ object pantalla{
 		keyboard.up().onPressDo({ansu.moverseArriba()})
         keyboard.down().onPressDo({ansu.moverseAbajo()})
         
-        game.onCollideDo(ansu,{algo => algo.ansuPesco()})
+        game.onCollideDo(ansu,{algo => algo.ansuPesco()  algo.fuePescado()})
  		
 
  		
  	}
  	}
-
+ 	
+ 	
 
 object persona {
 	
-	var property puntaje = 0
-	var property tiempo = 0
 	
 	var property estaParalizado = false
 	
@@ -151,8 +147,6 @@ object contadorVida {
 	       game.clear()
            game.addVisual(fondoCerrar)
 		   game.schedule(1000,{heladeraConPeces.agregarFinal()})
-		   //poner contador de peces hasta donde llego
-	       //sacar todo y poner imagen diciendo que perdio
 		}
 		
 	}
@@ -200,6 +194,10 @@ object heladeraConPeces {
 
 
 class ObjetosFlotantes {
+	
+    var property sePesco = false
+    
+
 
 	const vertical = (0..alturaAgua).anyOne()
 	
@@ -212,12 +210,15 @@ class ObjetosFlotantes {
 	
 	var property position = posicionInicial
 	
-
+    method fuePescado() {
+    	sePesco = true
+    }
 
 	method movete() {
         if (position.x() == -2 or position.x() == 21){
-        	
-          game.removeVisual(self)
+        		
+        	if (!sePesco) {game.removeVisual(self)}
+          
         }
         else
         {
@@ -244,9 +245,7 @@ class ObjetosFlotantes {
 	
   	method velocidadMov() = 1000
  	
- 	method movimientoMov() = "se mueve"
  	
-	method movimientoArranque() = "comienza a moverse"
 	
 
 }
@@ -257,7 +256,6 @@ class ObjetosFlotantes {
 
 class Pez inherits ObjetosFlotantes {
 	
-
 	
 	 method image() {
 	 	return if (estaDerecha) "assets/pezDer.png" else "assets/pezIzq.png"
@@ -270,7 +268,8 @@ class Pez inherits ObjetosFlotantes {
 	 	
 	}
 	
-//	override method velocidadMov() = 1000
+
+	
 }
 
 
@@ -292,7 +291,9 @@ class Basura inherits ObjetosFlotantes {
 	game.removeVisual(self)
 	contadorVida.sacarVida(1)
 	
-} 	
+} 
+
+override method velocidadMov() = 1500	
 	 
 }
 
@@ -305,7 +306,7 @@ class Medusa inherits ObjetosFlotantes {
 	
 	
 	//fijar despues cuanto tiempo quieren paralizar
-	const cantidadParalizar = 2500
+	const cantidadParalizar = 1500
 	
 	method image() {return if (estaDerecha) "assets/meduzaDer.png" else "assets/meduzaIzq.png"}
 	
@@ -319,6 +320,8 @@ class Medusa inherits ObjetosFlotantes {
 		
 
 	}
+	
+	override method velocidadMov() = 500
 }
 
 class Gusano inherits ObjetosFlotantes {
@@ -330,6 +333,8 @@ class Gusano inherits ObjetosFlotantes {
 		game.removeVisual(self)
 		contadorVida.agregarVida()
 	}
+	
+	override method velocidadMov() = 250
 	
 }
 
@@ -344,6 +349,8 @@ class Tiburon inherits ObjetosFlotantes {
 		game.removeVisual(self)
 		contadorVida.sacarVida(3)
 	}
+	
+	override method velocidadMov() = 250
 	
 }
 
@@ -449,6 +456,9 @@ class Hilo {
 				game.removeVisual(self)
 			
 	}
+	
+	method fuePescado () {}
+	
 }
 
 class Visual {
