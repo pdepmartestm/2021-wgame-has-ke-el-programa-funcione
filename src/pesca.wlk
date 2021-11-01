@@ -8,17 +8,6 @@ import wollok.game.*
 
 
 
-/*
- hay que ver que cuando un objeto se genera, al dar una vuelta completa (de izq a der y de der a izq)
- se elimine ya que se van a generar otros iguales durante ese lapso y si no se borra ninguno van a terminar
- llenando la pantalla de esos 
- */
-
-
-// IDEA PARA IMPLEMENTAR 
-
-//hay que ver el tema de que se generen aleatoreamente tambien en la izquierda
-//asi puede salir peces por ambos lados y no solo por la derecha
 
 
 const ancho = 20 //12
@@ -26,9 +15,14 @@ const alto = 15 //6
 const alturaAgua = 9 //4
 
 const fondoIniciar = new Visual(
-	image =  "assets/pantallaInicio.png",
+	image =  "assets/fondoInicio.jpg",
 	position = game.at(0,0)
 	)
+	
+const fondoCerrar = new Visual (
+	image = "assets/fondoCierre.jpg",
+	position = game.at(0,0)
+)
 
 object pantalla{
 	
@@ -41,7 +35,7 @@ object pantalla{
 		game.addVisual(fondoIniciar)
 //		game.boardGround("assets/pantallaInicio.png")
 	    game.boardGround("assets/fondo1.png")
-		keyboard.s().onPressDo{self.iniciar()}
+		keyboard.enter().onPressDo{self.iniciar()}
 	}	
 	
 	
@@ -155,8 +149,8 @@ object contadorVida {
 		
 		if (persona.perdio()){
 	       game.clear()
-           game.boardGround("assets/gameOver.png")
-		   game.schedule(1000,{})
+           game.addVisual(fondoCerrar)
+		   game.schedule(1000,{heladeraConPeces.agregarFinal()})
 		   //poner contador de peces hasta donde llego
 	       //sacar todo y poner imagen diciendo que perdio
 		}
@@ -192,6 +186,13 @@ object heladeraConPeces {
 	
 	method aumentarCantidad() {
 		capacidad += 1
+	}
+	method agregarFinal() {
+		
+		position = game.at(12,1)
+		game.addVisual(self)
+		
+		
 	}
 }
 	
