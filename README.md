@@ -11,7 +11,7 @@
 
 ## Capturas
 
-![image](assets/ansu.png)
+![image](assets/fondoInicio.jpg)
 
 ## Reglas de Juego / Instrucciones
 
