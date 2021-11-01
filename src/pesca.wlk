@@ -25,13 +25,32 @@ const ancho = 20 //12
 const alto = 15 //6
 const alturaAgua = 9 //4
 
+const fondoIniciar = new Visual(
+	image =  "assets/pantallaInicio.png",
+	position = game.at(0,0)
+	)
+
 object pantalla{
+	
+	
+	method pantallaInicio() {
+		
+		game.title("club de la pesca")
+		game.width(ancho)
+		game.height(alto)
+		game.addVisual(fondoIniciar)
+//		game.boardGround("assets/pantallaInicio.png")
+	    game.boardGround("assets/fondo1.png")
+		keyboard.s().onPressDo{self.iniciar()}
+	}	
+	
 	
 	
 	
 	method iniciar(){
 		
-		game.title("Juego comida")
+	    game.clear()
+	    
 		game.height(alto)
 		game.width(ancho)
  
@@ -81,7 +100,7 @@ object pantalla{
         
         game.onCollideDo(ansu,{algo => algo.ansuPesco()})
  		
- 		game.start()
+
  		
  	}
  	}
@@ -347,7 +366,9 @@ class Gusano inherits ObjetosFlotantes {
 
 class Tiburon inherits ObjetosFlotantes {
 	
-	var property image = "assets/tiburon.png"
+	 method image() {
+	 	return if (izquierda) "assets/tiburonIzq.png" else "assets/tiburonDer.png"
+	}
 	
 	method ansuPesco() {
 		game.removeVisual(self)
@@ -460,6 +481,9 @@ class Hilo {
 	}
 }
 
-
+class Visual {
+	var property image
+	var property position = game.origin()
+}
 
 

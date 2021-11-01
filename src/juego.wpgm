@@ -2,5 +2,6 @@ import wollok.game.*
 import pesca.*
 
 program juego {
-	pantalla.iniciar()
+	pantalla.pantallaInicio()
+    game.start()
 }
