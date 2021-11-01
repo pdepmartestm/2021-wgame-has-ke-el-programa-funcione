@@ -14,6 +14,9 @@ const fondoCerrar = new Visual (
 	position = game.at(0,0)
 )
 
+
+
+
 object pantalla{
 	
 	
@@ -29,10 +32,10 @@ object pantalla{
     	const musica = game.sound("assets/cancionFondo.mp3")
  		musica.shouldLoop(true)
  		game.schedule(500,{musica.play() musica.volume(0.5)})
+
  		keyboard.m().onPressDo{musica.volume(0)}
  		keyboard.u().onPressDo{musica.volume(0.5)}
  		keyboard.d().onPressDo{musica.volume(0.2)}
- 		
 	}	
 	
 	
