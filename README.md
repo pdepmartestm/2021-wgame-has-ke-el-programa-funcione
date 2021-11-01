@@ -26,5 +26,5 @@ PD: no todo es malo! tambien podras pescar una lata de gusano que haran que tus 
 
 - Facultad: UTN FRBA
 - Curso: K2002
-- Versión de wollok?????????????????????????
+- Versión de wollok: 3.0.0
 - No tenemos problema con que sea publico!
