@@ -177,13 +177,12 @@ object heladeraConPeces {
 		return "assets/pez" + self.capacidad() + ".png"
 	}
 	
-	method pesco() {
-		capacidad = capacidad + 1
-	}
 	
 	method aumentarCantidad() {
 		capacidad += 1
 	}
+	
+	
 	method agregarFinal() {
 		
 		position = game.at(12,1)
@@ -200,7 +199,6 @@ class ObjetosFlotantes {
 	
     var property sePesco = false
     
-
 
 	const vertical = (0..alturaAgua).anyOne()
 	
