@@ -315,6 +315,7 @@ class Medusa inherits ObjetosFlotantes {
 	
 	method ansuPesco(){
 		
+		contadorVida.sacarVida(1)
 		persona.cambiarImagen()
 		ansu.cambiarImagen("cañaElectrocutada")
 		persona.electrucutado()
@@ -431,6 +432,10 @@ object ansu {
 	method sacarElec() {
 		caniaElec = false
 	}
+	method posicionAbajo() {
+		
+		return position.up()
+	}
 	
 	
 }
@@ -454,8 +459,10 @@ class Hilo {
       return image
 	}
 	
+	
+	
 	method ansuPesco() {
-		
+		        
 				game.removeVisual(self)
 			
 	}
