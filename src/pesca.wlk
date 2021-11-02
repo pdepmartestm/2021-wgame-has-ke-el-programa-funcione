@@ -35,7 +35,7 @@ object pantalla{
 
  		keyboard.m().onPressDo{musica.volume(0)}
  		keyboard.u().onPressDo{musica.volume(0.5)}
- 		keyboard.d().onPressDo{musica.volume(0.2)}
+ 		keyboard.d().onPressDo{musica.volume(0.1)}
 	}	
 	
 	
