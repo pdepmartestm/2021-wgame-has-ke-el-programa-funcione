@@ -2,7 +2,7 @@ import wollok.game.*
 
 const ancho = 20 //12
 const alto = 15 //6
-const alturaAgua = 9 //4
+const alturaAgua = 8 //4
 
 const fondoIniciar = new Visual(
 	image =  "assets/fondoInicio.jpg",
@@ -55,27 +55,27 @@ object pantalla{
 
 // ver que cantidad de tiempo se quiere para cada uno
 		
- 		game.onTick(2500,"se crea pez", {const pez = new Pez()
+ 		game.onTick(5000,"se crea pez", {const pez = new Pez()
         	                             game.addVisual(pez)
         	                             pez.movete()
         })
 
- 		game.onTick(3500,"se crea basura", {const basura = new Basura()
+ 		game.onTick(7000,"se crea basura", {const basura = new Basura()
         	                             game.addVisual(basura)
         	                             basura.movete()
         })
         
-        game.onTick(5000,"se crea medusa", {const medusa = new Medusa()
+        game.onTick(10000,"se crea medusa", {const medusa = new Medusa()
         	                             game.addVisual(medusa)
         	                             medusa.movete()
         })
         
-        game.onTick(10000,"se crea tiburon", {const tiburon = new Tiburon()
+        game.onTick(30000,"se crea tiburon", {const tiburon = new Tiburon()
         	                             game.addVisual(tiburon)
         	                             tiburon.movete()
         })
         
-        game.onTick(7000,"se crea lata de gusanos", {const lataGusanos = new Gusano()
+        game.onTick(50000,"se crea lata de gusanos", {const lataGusanos = new Gusano()
         	                             game.addVisual(lataGusanos)
         	                             lataGusanos.movete()
         })
@@ -138,7 +138,7 @@ object contadorVida {
 	
 	var property image = "assets/contVidas3.png"
 	
-	var property position = game.at(1,13)
+	var property position = game.at(1,13.5)
 	
 	
 	method sacarVida(cant) {
@@ -168,7 +168,7 @@ object contadorVida {
 
 object heladeraConPeces {
 	
-	var property position = game.at(5,11)
+	var property position = game.at(3,11)
 	
 	var property capacidad = 0
 	
@@ -204,7 +204,7 @@ class ObjetosFlotantes {
 
 	const vertical = (0..alturaAgua).anyOne()
 	
-	const horizontal = [20,-1].anyOne()
+	const horizontal = [21,-2].anyOne()
 	
 	const posicionInicial  = game.at(horizontal,vertical)
 	
@@ -218,7 +218,7 @@ class ObjetosFlotantes {
     }
 
 	method movete() {
-        if (position.x() == -2 or position.x() == 21){
+        if (position.x() == -2 or position.x() == 22){
         		
         	if (!sePesco) {game.removeVisual(self)}
           
@@ -281,7 +281,7 @@ class Pez inherits ObjetosFlotantes {
 
 class Basura inherits ObjetosFlotantes {
 	
-	const basuras = ["zapato","barril","botella"]
+	const basuras = ["zapato","barril","zapato2"]
 	
 	const objeto = basuras.anyOne()
 	
@@ -353,13 +353,13 @@ class Tiburon inherits ObjetosFlotantes {
 		contadorVida.sacarVida(3)
 	}
 	
-	override method velocidadMov() = 250
+	override method velocidadMov() = 500
 	
 }
 
 object ansu {
 	
-	var property position = game.at(9,alturaAgua)
+	var property position = game.at(9,alturaAgua+1)
 	
 	var property caniaElec = false
 	
