@@ -1,8 +1,8 @@
 import wollok.game.*
 
-const ancho = 20 //12
-const alto = 15 //6
-const alturaAgua = 8 //4
+const ancho = 20
+const alto = 15
+const alturaAgua = 8 
 
 const fondoIniciar = new Visual(
 	image =  "assets/fondoInicio.jpg",
@@ -53,7 +53,7 @@ object pantalla{
 		game.addVisual(contadorVida)
 
 
-// ver que cantidad de tiempo se quiere para cada uno
+
 		
  		game.onTick(5000,"se crea pez", {const pez = new Pez()
         	                             game.addVisual(pez)
@@ -308,7 +308,6 @@ override method velocidadMov() = 1500
 class Medusa inherits ObjetosFlotantes {
 	
 	
-	//fijar despues cuanto tiempo quieren paralizar
 	const cantidadParalizar = 1500
 	
 	method image() {return if (estaDerecha) "assets/meduzaDer.png" else "assets/meduzaIzq.png"}
