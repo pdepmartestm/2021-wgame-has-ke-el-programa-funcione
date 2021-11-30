@@ -204,10 +204,9 @@ class ObjetosFlotantes {
 	
 	const horizontal = [21,-2].anyOne()
 	
-	const posicionInicial  = game.at(horizontal,vertical)
+	const  posicionInicial  = game.at(horizontal,vertical)
 	
-	var property estaDerecha = !(horizontal == -1)
-	
+	var property estaDerecha = !(horizontal == -2)
 	
 	var property position = posicionInicial
 	
@@ -216,7 +215,7 @@ class ObjetosFlotantes {
     }
 
 	method movete() {
-        if (position.x() == -2 or position.x() == 22){
+        if (position.x() == -3 or position.x() == 22){
         		
         	if (!sePesco) {game.removeVisual(self)}
           
