@@ -8,13 +8,15 @@ const fondoIniciar = new Visual(
 	image =  "assets/fondoInicio.jpg",
 	position = game.at(0,0)
 	)
+const fondoManchado = new Visual(
+	image =  "assets/fondoMancha.jpg",
+	position = game.at(0,0) 
+)
 	
 const fondoCerrar = new Visual (
 	image = "assets/fondoCierre.jpg",
 	position = game.at(0,0)
 )
-
-
 
 
 object pantalla{
@@ -36,7 +38,7 @@ object pantalla{
  		keyboard.m().onPressDo{musica.volume(0)}
  		keyboard.u().onPressDo{musica.volume(0.5)}
  		keyboard.d().onPressDo{musica.volume(0.1)}
-	}	
+	}
 	
 	
 	
@@ -79,8 +81,18 @@ object pantalla{
         	                             game.addVisual(lataGusanos)
         	                             lataGusanos.movete()
         })
+       
+		 game.onTick(30000,"se crea pulpo", {const pulpo = new Pulpo()
+        	                             game.addVisual(pulpo)
+        	                             pulpo.movete()
+        })
+      
+         game.onTick(50000,"se crea quita manchas", {const quitaManchas = new QuitaManchas()
+        	                             game.addVisual(quitaManchas)
+        	                             quitaManchas.movete()
+        })
         
-			
+        	
 		game.addVisual(persona)
 		game.addVisual(ansu)
 		keyboard.up().onPressDo({ansu.moverseArriba()})
@@ -100,6 +112,8 @@ object persona {
 	
 	var property estaParalizado = false
 	
+	var property estaManchado = false
+	
 	var property position = game.at(8.15,10.99999455)
 	
 	var property image = "assets/pinguino.png"
@@ -113,7 +127,9 @@ object persona {
 		image = "assets/pinguino.png" 
 	}
 	
-
+	method cambiarImagenTinta(){
+		image= "assets/pinguinoConTinta.png"
+	}
 	method electrucutado() {
 		
 		if (estaParalizado)
@@ -129,6 +145,16 @@ object persona {
 	method perdio() {
 		
 		return contadorVida.vidas() <= 0 
+	}
+	method mancharConTinta() {
+		
+		estaManchado = true
+		self.cambiarImagenTinta()
+		game.say(self, "Tengo que encontrar el limpia manchas")
+	}
+	method limpiar() {
+		self.volverNormalidad()
+		estaManchado = false
 	}
 }
 
@@ -200,7 +226,7 @@ class ObjetosFlotantes {
     var property sePesco = false
     
 
-	const vertical = (0..alturaAgua).anyOne()
+	const vertical = (0..(alturaAgua-1)).anyOne()
 	
 	const horizontal = [21,-2].anyOne()
 	
@@ -245,8 +271,6 @@ class ObjetosFlotantes {
 	
   	method velocidadMov() = 1000
  	
- 	
-	
 
 }
 
@@ -272,10 +296,6 @@ class Pez inherits ObjetosFlotantes {
 	
 }
 
-
-
-
-
 class Basura inherits ObjetosFlotantes {
 	
 	const basuras = ["zapato","barril","zapato2"]
@@ -296,10 +316,6 @@ class Basura inherits ObjetosFlotantes {
 override method velocidadMov() = 1500	
 	 
 }
-
-
-
-
 
 
 class Medusa inherits ObjetosFlotantes {
@@ -353,6 +369,61 @@ class Tiburon inherits ObjetosFlotantes {
 	override method velocidadMov() = 500
 	
 }
+
+ class Pulpo inherits ObjetosFlotantes {
+ 	
+ 	 method image() {
+	 	return if (estaDerecha) "assets/pulpoDER.png" else "assets/pulpoIZQ.png"
+	 	
+	 }
+	 
+	 method ansuPesco() {
+		game.removeVisual(self)
+		self.mancharConTinta()
+		contadorVida.sacarVida(1)
+	}
+	
+	method mancharConTinta(){
+		persona.mancharConTinta()
+		game.addVisual(mancha)
+				
+	}
+	
+	 
+ }
+
+class QuitaManchas inherits ObjetosFlotantes {
+	
+	var property image = "assets/limpiaManchas.png"
+	
+	method ansuPesco() {
+		
+		game.removeVisual(self)
+		persona.limpiar()
+		mancha.limpiar()
+	}
+	
+	override method velocidadMov() = 800
+	
+}
+
+
+object mancha{
+	
+	var property position = game.at(1,-1)
+	
+	method image() {
+	 	return  "assets/mancha.png"
+	 	
+	 }
+	method limpiar() {
+		game.removeVisual(self)
+	}
+	 
+	
+	
+}
+
 
 object ansu {
 	
