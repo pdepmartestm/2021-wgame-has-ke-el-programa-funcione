@@ -82,12 +82,12 @@ object pantalla{
         	                             lataGusanos.movete()
         })
        
-		 game.onTick(30000,"se crea pulpo", {const pulpo = new Pulpo()
+		 game.onTick(10000,"se crea pulpo", {const pulpo = new Pulpo()
         	                             game.addVisual(pulpo)
         	                             pulpo.movete()
         })
       
-         game.onTick(50000,"se crea quita manchas", {const quitaManchas = new QuitaManchas()
+         game.onTick(20000,"se crea quita manchas", {const quitaManchas = new QuitaManchas()
         	                             game.addVisual(quitaManchas)
         	                             quitaManchas.movete()
         })

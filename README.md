@@ -16,10 +16,12 @@
 ## Reglas de Juego / Instrucciones
 
 El juego consiste en pescar la mayor cantidad de peces posibles pero CUIDADO! Empezaras con 3 gusanos como vida, estas se te iran restando 
-a medida que vayas pescando cosas como basura (descuenta 1 vida), medusa (descuenta 1 vida y te paraliza durante 1,5 segundos) y por ultimo 
-el temible tiburon, este te hara perder inmediatamente el juego asi que ten mucho cuidado.
+a medida que vayas pescando cosas como basura (descuenta 1 vida), medusa (descuenta 1 vida y te paraliza durante 1,5 segundos),un temible tiburon, 
+este te hara perder inmediatamente el juego asi que ten mucho cuidado y tambien puedes cruzarte con algun pulpo, que no solo te descontara 1 vida sino que
+manchara toda tu pantalla (y a ti tambien) haciendo que se te dificulte ver.
 
-PD: no todo es malo! tambien podras pescar una lata de gusano que haran que tus gusanos aumenten, con un maximo de 3
+PD: no todo es malo! tambien podras pescar una lata de gusano que haran que tus gusanos aumenten, con un maximo de 3. Y no te preocupes por las manchas, 
+mucha gente ademas de arrojar basura al mar tambien desecha ciertos objetos utiles; puedes pescar un quita manchas para limpiarte y limpiar tambien tu vista.
 
 
 ## Otros
