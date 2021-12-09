@@ -8,10 +8,6 @@ const fondoIniciar = new Visual(
 	image =  "assets/fondoInicio.jpg",
 	position = game.at(0,0)
 	)
-const fondoManchado = new Visual(
-	image =  "assets/fondoMancha.jpg",
-	position = game.at(0,0) 
-)
 	
 const fondoCerrar = new Visual (
 	image = "assets/fondoCierre.jpg",
