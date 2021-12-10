@@ -9,11 +9,15 @@ const fondoIniciar = new Visual(
 	position = game.at(0,0)
 	)
 	
-const fondoCerrar = new Visual (
+const fondoCerrar1 = new Visual (
 	image = "assets/fondoCierre.jpg",
 	position = game.at(0,0)
 )
 
+const fondoCerrar2 = new Visual (
+	image = "assets/fondoCierre2.jpg",
+	position = game.at(0,0)
+)
 
 object pantalla{
 	
@@ -86,6 +90,11 @@ object pantalla{
          game.onTick(20000,"se crea quita manchas", {const quitaManchas = new QuitaManchas()
         	                             game.addVisual(quitaManchas)
         	                             quitaManchas.movete()
+        })
+        
+        game.onTick(10000,"se crea cangrejo", {const cangrejo = new Cangrejo()
+        	                             game.addVisual(cangrejo)
+        	                             cangrejo.movete()
         })
         
         	
@@ -170,7 +179,7 @@ object contadorVida {
 		
 		if (persona.perdio()){
 	       game.clear()
-           game.addVisual(fondoCerrar)
+           game.addVisual(fondoCerrar1)
 		   game.schedule(1000,{heladeraConPeces.agregarFinal()})
 		}
 		
@@ -401,6 +410,19 @@ class QuitaManchas inherits ObjetosFlotantes {
 	
 	override method velocidadMov() = 800
 	
+}
+
+class Cangrejo inherits ObjetosFlotantes{
+	
+	method image() {
+	 	return if (estaDerecha) "assets/cangrejoDer.png" else "assets/cangrejoIzq.png"
+	}
+	
+	method ansuPesco(){
+		game.clear()
+        game.addVisual(fondoCerrar2)
+		game.schedule(1000,{heladeraConPeces.agregarFinal()})
+	}
 }
 
 
